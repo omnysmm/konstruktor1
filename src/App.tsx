@@ -4,6 +4,7 @@ import { templates } from './templates';
 import { TemplateEditor } from './components/TemplateEditor';
 import { TemplateCard } from './components/TemplateCard';
 import { SectionRenderer } from './components/SectionRenderer';
+import { DownloadProject } from './components/DownloadProject';
 import { exportTemplateToHTML, downloadHTML } from './utils/exportHTML';
 
 type View = 'home' | 'preview' | 'editor';
@@ -246,6 +247,9 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Download Project Button */}
+      <DownloadProject />
     </div>
   );
 }
