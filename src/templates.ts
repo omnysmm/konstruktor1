@@ -1,0 +1,561 @@
+import { Template } from './types';
+
+export const templates: Template[] = [
+  {
+    id: 'ai-marketplace',
+    name: 'AI Marketplace',
+    category: 'Маркетплейс',
+    description: 'Маркетплейс продуктов искусственного интеллекта от разных разработчиков',
+    thumbnail: '🤖',
+    colors: {
+      primary: '#6366f1',
+      secondary: '#8b5cf6',
+      accent: '#06b6d4',
+      background: '#0f172a',
+      text: '#f8fafc',
+    },
+    sections: [
+      {
+        id: 'hero',
+        type: 'hero',
+        editable: true,
+        content: {
+          title: 'AI Marketplace',
+          subtitle: 'Откройте мир искусственного интеллекта. Тысячи AI-решений от лучших разработчиков мира.',
+          ctaText: 'Начать бесплатно',
+          ctaSecondary: 'Смотреть каталог',
+        },
+      },
+      {
+        id: 'stats',
+        type: 'stats',
+        editable: true,
+        content: {
+          items: [
+            { value: '2,500+', label: 'AI моделей' },
+            { value: '850+', label: 'Разработчиков' },
+            { value: '150K+', label: 'Пользователей' },
+            { value: '99.9%', label: 'Uptime' },
+          ],
+        },
+      },
+      {
+        id: 'categories',
+        type: 'categories',
+        editable: true,
+        content: {
+          title: 'Категории AI продуктов',
+          subtitle: 'Найдите идеальное решение для вашей задачи',
+          items: [
+            { icon: '🧠', name: 'NLP & Текст', count: '450+' },
+            { icon: '👁️', name: 'Компьютерное зрение', count: '320+' },
+            { icon: '🎵', name: 'Аудио & Речь', count: '280+' },
+            { icon: '🎨', name: 'Генерация изображений', count: '390+' },
+            { icon: '📊', name: 'Аналитика данных', count: '210+' },
+            { icon: '🤖', name: 'Чат-боты', count: '540+' },
+          ],
+        },
+      },
+      {
+        id: 'products',
+        type: 'products',
+        editable: true,
+        content: {
+          title: 'Популярные AI продукты',
+          subtitle: 'Лучшие решения от проверенных разработчиков',
+          items: [
+            {
+              name: 'NeuralVision Pro',
+              developer: 'DeepTech Labs',
+              description: 'Продвинутая система компьютерного зрения для анализа изображений и видео в реальном времени',
+              price: 'от $49/мес',
+              rating: 4.9,
+              reviews: 234,
+              tags: ['Computer Vision', 'Real-time'],
+              icon: '👁️',
+            },
+            {
+              name: 'TextGenius AI',
+              developer: 'LanguageAI Inc.',
+              description: 'Генерация и редактирование текстов с помощью GPT-моделей нового поколения',
+              price: 'от $29/мес',
+              rating: 4.8,
+              reviews: 567,
+              tags: ['NLP', 'Content'],
+              icon: '✍️',
+            },
+            {
+              name: 'VoiceClone Studio',
+              developer: 'AudioMind',
+              description: 'Клонирование голоса и синтез речи на 50+ языках с натуральным звучанием',
+              price: 'от $79/мес',
+              rating: 4.7,
+              reviews: 189,
+              tags: ['Audio', 'Voice'],
+              icon: '🎙️',
+            },
+            {
+              name: 'DataInsight AI',
+              developer: 'AnalyticsPro',
+              description: 'Автоматический анализ данных и построение прогнозов с помощью машинного обучения',
+              price: 'от $99/мес',
+              rating: 4.9,
+              reviews: 312,
+              tags: ['Analytics', 'ML'],
+              icon: '📊',
+            },
+            {
+              name: 'ArtForge AI',
+              developer: 'CreativeAI Studio',
+              description: 'Генерация уникальных изображений и артов по текстовому описанию',
+              price: 'от $19/мес',
+              rating: 4.6,
+              reviews: 891,
+              tags: ['Image Gen', 'Art'],
+              icon: '🎨',
+            },
+            {
+              name: 'CodeAssist Pro',
+              developer: 'DevTools AI',
+              description: 'AI-ассистент для разработчиков: автодополнение, рефакторинг, ревью кода',
+              price: 'от $39/мес',
+              rating: 4.8,
+              reviews: 445,
+              tags: ['Code', 'DevTools'],
+              icon: '💻',
+            },
+          ],
+        },
+      },
+      {
+        id: 'developers',
+        type: 'developers',
+        editable: true,
+        content: {
+          title: 'Ведущие разработчики',
+          subtitle: 'Присоединяйтесь к сообществу AI-разработчиков',
+          items: [
+            { name: 'DeepTech Labs', products: 24, rating: 4.9, avatar: '🔬' },
+            { name: 'LanguageAI Inc.', products: 18, rating: 4.8, avatar: '📝' },
+            { name: 'AudioMind', products: 12, rating: 4.7, avatar: '🎵' },
+            { name: 'AnalyticsPro', products: 31, rating: 4.9, avatar: '📈' },
+          ],
+        },
+      },
+      {
+        id: 'pricing',
+        type: 'pricing',
+        editable: true,
+        content: {
+          title: 'Тарифные планы',
+          subtitle: 'Выберите подходящий план для вашего бизнеса',
+          plans: [
+            {
+              name: 'Стартер',
+              price: '$0',
+              period: '/мес',
+              features: ['5 AI моделей', '1000 запросов/мес', 'Базовая поддержка', 'API доступ'],
+              highlighted: false,
+            },
+            {
+              name: 'Профессионал',
+              price: '$49',
+              period: '/мес',
+              features: ['50 AI моделей', '50000 запросов/мес', 'Приоритетная поддержка', 'Полный API доступ', 'Кастомная настройка', 'Аналитика'],
+              highlighted: true,
+            },
+            {
+              name: 'Корпоративный',
+              price: '$199',
+              period: '/мес',
+              features: ['Безлимитные модели', 'Безлимитные запросы', '24/7 поддержка', 'Выделенный сервер', 'SLA 99.99%', 'On-premise'],
+              highlighted: false,
+            },
+          ],
+        },
+      },
+      {
+        id: 'footer',
+        type: 'footer',
+        editable: true,
+        content: {
+          companyName: 'AI Marketplace',
+          description: 'Крупнейшая платформа продуктов искусственного интеллекта',
+          links: [
+            { title: 'Платформа', items: ['Каталог', 'Разработчикам', 'API', 'Документация'] },
+            { title: 'Компания', items: ['О нас', 'Блог', 'Карьера', 'Контакты'] },
+            { title: 'Поддержка', items: ['Помощь', 'FAQ', 'Статус', 'Сообщество'] },
+          ],
+        },
+      },
+    ],
+  },
+  {
+    id: 'portfolio',
+    name: 'Портфолио',
+    category: 'Личный сайт',
+    description: 'Стильное портфолио для дизайнеров и разработчиков',
+    thumbnail: '💼',
+    colors: {
+      primary: '#1e293b',
+      secondary: '#475569',
+      accent: '#f59e0b',
+      background: '#ffffff',
+      text: '#1e293b',
+    },
+    sections: [
+      {
+        id: 'hero',
+        type: 'hero',
+        editable: true,
+        content: {
+          title: 'Алексей Петров',
+          subtitle: 'Full-Stack разработчик & UI/UX дизайнер с 8+ лет опыта создания цифровых продуктов',
+          ctaText: 'Смотреть работы',
+          ctaSecondary: 'Связаться',
+        },
+      },
+      {
+        id: 'about',
+        type: 'about',
+        editable: true,
+        content: {
+          title: 'Обо мне',
+          description: 'Создаю современные веб-приложения и интерфейсы, которые решают реальные бизнес-задачи. Специализируюсь на React, TypeScript и дизайне пользовательских интерфейсов.',
+          skills: [
+            { name: 'React / Next.js', level: 95 },
+            { name: 'TypeScript', level: 90 },
+            { name: 'UI/UX Design', level: 85 },
+            { name: 'Node.js', level: 80 },
+          ],
+        },
+      },
+      {
+        id: 'projects',
+        type: 'projects',
+        editable: true,
+        content: {
+          title: 'Проекты',
+          items: [
+            { title: 'E-commerce платформа', category: 'Web App', description: 'Полный цикл разработки интернет-магазина с нуля', icon: '🛒' },
+            { title: 'Мобильное приложение', category: 'Mobile', description: 'Фитнес-трекер с AI-рекомендациями', icon: '📱' },
+            { title: 'SaaS Dashboard', category: 'Design', description: 'Аналитическая панель для маркетинговой платформы', icon: '📊' },
+            { title: 'Корпоративный сайт', category: 'Web', description: 'Редизайн и разработка сайта для финтех-компании', icon: '🏢' },
+          ],
+        },
+      },
+      {
+        id: 'contact',
+        type: 'contact',
+        editable: true,
+        content: {
+          title: 'Свяжитесь со мной',
+          subtitle: 'Готов обсудить ваш проект',
+          email: 'alex@example.com',
+          phone: '+7 (999) 123-45-67',
+        },
+      },
+      {
+        id: 'footer',
+        type: 'footer',
+        editable: true,
+        content: {
+          companyName: 'Алексей Петров',
+          description: 'Full-Stack разработчик & UI/UX дизайнер',
+          links: [
+            { title: 'Навигация', items: ['Главная', 'Проекты', 'Обо мне', 'Контакты'] },
+            { title: 'Соцсети', items: ['GitHub', 'LinkedIn', 'Dribbble', 'Telegram'] },
+          ],
+        },
+      },
+    ],
+  },
+  {
+    id: 'restaurant',
+    name: 'Ресторан',
+    category: 'Еда и напитки',
+    description: 'Элегантный сайт для ресторана или кафе',
+    thumbnail: '🍽️',
+    colors: {
+      primary: '#7c2d12',
+      secondary: '#a16207',
+      accent: '#dc2626',
+      background: '#fefce8',
+      text: '#1c1917',
+    },
+    sections: [
+      {
+        id: 'hero',
+        type: 'hero',
+        editable: true,
+        content: {
+          title: 'La Cucina',
+          subtitle: 'Итальянская кухня с авторским взглядом шеф-повара. Свежие продукты, уникальные рецепты, атмосфера Италии.',
+          ctaText: 'Забронировать стол',
+          ctaSecondary: 'Наше меню',
+        },
+      },
+      {
+        id: 'menu',
+        type: 'menu',
+        editable: true,
+        content: {
+          title: 'Наше меню',
+          subtitle: 'Лучшие блюда итальянской кухни',
+          categories: [
+            {
+              name: 'Антипасти',
+              items: [
+                { name: 'Брускетта', price: '450 ₽', description: 'С томатами, базиликом и оливковым маслом' },
+                { name: 'Карпаччо', price: '680 ₽', description: 'Из говядины с рукколой и пармезаном' },
+              ],
+            },
+            {
+              name: 'Паста',
+              items: [
+                { name: 'Карбонара', price: '720 ₽', description: 'Классическая с гуанчиале и пекорино' },
+                { name: 'Тальятелле', price: '850 ₽', description: 'С белыми грибами и трюфельным маслом' },
+              ],
+            },
+            {
+              name: 'Десерты',
+              items: [
+                { name: 'Тирамису', price: '490 ₽', description: 'Домашний по фирменному рецепту' },
+                { name: 'Панна-котта', price: '420 ₽', description: 'С ягодным соусом' },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        id: 'about',
+        type: 'about',
+        editable: true,
+        content: {
+          title: 'Наша история',
+          description: 'Ресторан La Cucina открылся в 2015 году и быстро стал одним из любимых мест ценителей итальянской кухни. Наш шеф-повар Марко Россини привёз рецепты из семейной традиции региона Тоскана.',
+          skills: [
+            { name: 'Свежие продукты', level: 100 },
+            { name: 'Авторская кухня', level: 95 },
+            { name: 'Винная карта', level: 90 },
+            { name: 'Уютная атмосфера', level: 95 },
+          ],
+        },
+      },
+      {
+        id: 'contact',
+        type: 'contact',
+        editable: true,
+        content: {
+          title: 'Забронировать стол',
+          subtitle: 'Мы ждём вас каждый день с 12:00 до 23:00',
+          email: 'reserve@lacucina.ru',
+          phone: '+7 (495) 123-45-67',
+        },
+      },
+      {
+        id: 'footer',
+        type: 'footer',
+        editable: true,
+        content: {
+          companyName: 'La Cucina',
+          description: 'Итальянский ресторан авторской кухни',
+          links: [
+            { title: 'Меню', items: ['Антипасти', 'Паста', 'Пицца', 'Десерты'] },
+            { title: 'Информация', items: ['О нас', 'Бронирование', 'Доставка', 'Контакты'] },
+          ],
+        },
+      },
+    ],
+  },
+  {
+    id: 'fitness',
+    name: 'Фитнес-клуб',
+    category: 'Спорт и здоровье',
+    description: 'Современный сайт для фитнес-клуба или спортзала',
+    thumbnail: '💪',
+    colors: {
+      primary: '#059669',
+      secondary: '#0891b2',
+      accent: '#f97316',
+      background: '#f0fdf4',
+      text: '#064e3b',
+    },
+    sections: [
+      {
+        id: 'hero',
+        type: 'hero',
+        editable: true,
+        content: {
+          title: 'PowerFit Gym',
+          subtitle: 'Современный фитнес-клуб с профессиональными тренерами, новейшим оборудованием и индивидуальным подходом к каждому клиенту.',
+          ctaText: 'Записаться на тренировку',
+          ctaSecondary: 'Наши программы',
+        },
+      },
+      {
+        id: 'programs',
+        type: 'categories',
+        editable: true,
+        content: {
+          title: 'Наши программы',
+          subtitle: 'Выберите подходящую программу тренировок',
+          items: [
+            { icon: '🏋️', name: 'Силовые тренировки', count: '12 программ' },
+            { icon: '🧘', name: 'Йога и растяжка', count: '8 программ' },
+            { icon: '🏃', name: 'Кардио', count: '10 программ' },
+            { icon: '🥊', name: 'Единоборства', count: '6 программ' },
+            { icon: '🏊', name: 'Плавание', count: '5 программ' },
+            { icon: '🤸', name: 'Кроссфит', count: '7 программ' },
+          ],
+        },
+      },
+      {
+        id: 'trainers',
+        type: 'developers',
+        editable: true,
+        content: {
+          title: 'Наши тренеры',
+          subtitle: 'Профессионалы с международными сертификатами',
+          items: [
+            { name: 'Дмитрий Волков', products: 'Силовые', rating: 4.9, avatar: '🏋️' },
+            { name: 'Анна Смирнова', products: 'Йога', rating: 5.0, avatar: '🧘' },
+            { name: 'Максим Орлов', products: 'Кроссфит', rating: 4.8, avatar: '🤸' },
+            { name: 'Елена Козлова', products: 'Пилатес', rating: 4.9, avatar: '💃' },
+          ],
+        },
+      },
+      {
+        id: 'pricing',
+        type: 'pricing',
+        editable: true,
+        content: {
+          title: 'Абонементы',
+          subtitle: 'Выберите удобный формат',
+          plans: [
+            {
+              name: 'Разовое',
+              price: '500 ₽',
+              period: '/занятие',
+              features: ['Одно посещение', 'Все зоны', 'Раздевалка', 'Без тренера'],
+              highlighted: false,
+            },
+            {
+              name: 'Месячный',
+              price: '3 900 ₽',
+              period: '/мес',
+              features: ['Безлимитные посещения', 'Все зоны', '1 тренировка с тренером', 'Сауна и бассейн', 'Фитнес-бар скидка 10%'],
+              highlighted: true,
+            },
+            {
+              name: 'Годовой',
+              price: '35 000 ₽',
+              period: '/год',
+              features: ['Безлимитные посещения', 'VIP зоны', '4 тренировки с тренером/мес', 'Персональный план', 'Заморозка до 30 дней', 'Гостевой визит/мес'],
+              highlighted: false,
+            },
+          ],
+        },
+      },
+      {
+        id: 'footer',
+        type: 'footer',
+        editable: true,
+        content: {
+          companyName: 'PowerFit Gym',
+          description: 'Современный фитнес-клуб для достижения ваших целей',
+          links: [
+            { title: 'Клуб', items: ['О нас', 'Тренеры', 'Расписание', 'Цены'] },
+            { title: 'Услуги', items: ['Персональные', 'Групповые', 'Онлайн', 'Питание'] },
+          ],
+        },
+      },
+    ],
+  },
+  {
+    id: 'agency',
+    name: 'Digital-агентство',
+    category: 'Бизнес',
+    description: 'Профессиональный сайт для digital-агентства',
+    thumbnail: '🚀',
+    colors: {
+      primary: '#1e40af',
+      secondary: '#7c3aed',
+      accent: '#ec4899',
+      background: '#f8fafc',
+      text: '#0f172a',
+    },
+    sections: [
+      {
+        id: 'hero',
+        type: 'hero',
+        editable: true,
+        content: {
+          title: 'Digital Wave Agency',
+          subtitle: 'Создаём цифровые продукты, которые двигают бизнес вперёд. Стратегия, дизайн, разработка, маркетинг.',
+          ctaText: 'Обсудить проект',
+          ctaSecondary: 'Наши кейсы',
+        },
+      },
+      {
+        id: 'services',
+        type: 'categories',
+        editable: true,
+        content: {
+          title: 'Наши услуги',
+          subtitle: 'Полный цикл digital-услуг для вашего бизнеса',
+          items: [
+            { icon: '🎨', name: 'UI/UX Дизайн', count: 'от 150K ₽' },
+            { icon: '💻', name: 'Веб-разработка', count: 'от 300K ₽' },
+            { icon: '📱', name: 'Мобильные приложения', count: 'от 500K ₽' },
+            { icon: '📈', name: 'Digital-маркетинг', count: 'от 80K ₽/мес' },
+            { icon: '🔍', name: 'SEO-продвижение', count: 'от 60K ₽/мес' },
+            { icon: '📊', name: 'Брендинг', count: 'от 200K ₽' },
+          ],
+        },
+      },
+      {
+        id: 'cases',
+        type: 'projects',
+        editable: true,
+        content: {
+          title: 'Кейсы',
+          items: [
+            { title: 'Финтех-платформа', category: 'Web App', description: 'Разработка платформы для управления инвестициями', icon: '💰' },
+            { title: 'Маркетплейс', category: 'E-commerce', description: 'Маркетплейс handmade товаров с 50K+ продавцов', icon: '🛍️' },
+            { title: 'Мобильный банкинг', category: 'Mobile', description: 'Редизайн приложения для топ-10 банка', icon: '🏦' },
+            { title: 'EdTech платформа', category: 'Web App', description: 'Образовательная платформа с 100K+ студентов', icon: '🎓' },
+          ],
+        },
+      },
+      {
+        id: 'team',
+        type: 'developers',
+        editable: true,
+        content: {
+          title: 'Команда',
+          subtitle: 'Эксперты с опытом работы в ведущих компаниях',
+          items: [
+            { name: 'Игорь Савельев', products: 'CEO', rating: 15, avatar: '👨‍💼' },
+            { name: 'Мария Иванова', products: 'Design Lead', rating: 10, avatar: '👩‍🎨' },
+            { name: 'Андрей Козлов', products: 'Tech Lead', rating: 12, avatar: '👨‍💻' },
+            { name: 'Ольга Новикова', products: 'Marketing', rating: 8, avatar: '👩‍💼' },
+          ],
+        },
+      },
+      {
+        id: 'footer',
+        type: 'footer',
+        editable: true,
+        content: {
+          companyName: 'Digital Wave Agency',
+          description: 'Создаём цифровое будущее вашего бизнеса',
+          links: [
+            { title: 'Услуги', items: ['Дизайн', 'Разработка', 'Маркетинг', 'Брендинг'] },
+            { title: 'Компания', items: ['О нас', 'Команда', 'Кейсы', 'Контакты'] },
+          ],
+        },
+      },
+    ],
+  },
+];
