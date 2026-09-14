@@ -4,6 +4,7 @@ import { templates } from './templates';
 import { TemplateEditor } from './components/TemplateEditor';
 import { TemplateCard } from './components/TemplateCard';
 import { SectionRenderer } from './components/SectionRenderer';
+import { exportTemplateToHTML, downloadHTML } from './utils/exportHTML';
 
 type View = 'home' | 'preview' | 'editor';
 
@@ -79,6 +80,12 @@ function App() {
     setActiveTemplates(prev => ({ ...prev, [selectedTemplate.id]: updated }));
   }, [selectedTemplate]);
 
+  const handleDownloadTemplate = useCallback((template: Template) => {
+    const html = exportTemplateToHTML(template);
+    const filename = `${template.name.replace(/\s+/g, '-').toLowerCase()}.html`;
+    downloadHTML(html, filename);
+  }, []);
+
   if (view === 'editor' && selectedTemplate) {
     return (
       <TemplateEditor
@@ -113,6 +120,13 @@ function App() {
               <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">Предпросмотр</span>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => handleDownloadTemplate(selectedTemplate)}
+                className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm flex items-center gap-2"
+              >
+                <span>⬇️</span>
+                <span>Скачать HTML</span>
+              </button>
               <button
                 onClick={() => handleEditTemplate(selectedTemplate.id)}
                 className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
@@ -213,6 +227,7 @@ function App() {
               template={template}
               onSelect={handleSelectTemplate}
               onEdit={handleEditTemplate}
+              onDownload={handleDownloadTemplate}
               isActive={!!activeTemplates[template.id]}
             />
           ))}

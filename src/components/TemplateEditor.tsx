@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Template, TemplateSection, EditingState } from '../types';
 import { SectionRenderer } from './SectionRenderer';
+import { exportTemplateToHTML, downloadHTML } from '../utils/exportHTML';
 
 interface Props {
   template: Template;
@@ -29,6 +30,15 @@ export function TemplateEditor({
 }: Props) {
   const [activeTab, setActiveTab] = useState<EditorTab>('content');
   const [showAddPanel, setShowAddPanel] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
+
+  const handleDownload = () => {
+    const html = exportTemplateToHTML(template);
+    const filename = `${template.name.replace(/\s+/g, '-').toLowerCase()}.html`;
+    downloadHTML(html, filename);
+    setDownloadSuccess(true);
+    setTimeout(() => setDownloadSuccess(false), 3000);
+  };
 
   const selectedSectionData = template.sections.find(s => s.id === editingState.selectedSection);
 
@@ -354,8 +364,18 @@ export function TemplateEditor({
           <span className="text-sm font-semibold text-gray-800">{template.name}</span>
           <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full">Редактор</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          {downloadSuccess && (
+            <span className="text-xs text-green-600 font-medium animate-pulse">✓ Скачано!</span>
+          )}
           <span className="text-xs text-gray-400">Автосохранение ✓</span>
+          <button
+            onClick={handleDownload}
+            className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm flex items-center gap-2"
+          >
+            <span>⬇️</span>
+            <span>Скачать HTML</span>
+          </button>
         </div>
       </div>
 

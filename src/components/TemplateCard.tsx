@@ -4,10 +4,11 @@ interface Props {
   template: Template;
   onSelect: (template: Template) => void;
   onEdit: (id: string) => void;
+  onDownload: (template: Template) => void;
   isActive: boolean;
 }
 
-export function TemplateCard({ template, onSelect, onEdit, isActive }: Props) {
+export function TemplateCard({ template, onSelect, onEdit, onDownload, isActive }: Props) {
   return (
     <div className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
       {/* Preview Area */}
@@ -54,8 +55,16 @@ export function TemplateCard({ template, onSelect, onEdit, isActive }: Props) {
             👁️ Предпросмотр
           </button>
           <button
+            onClick={() => onDownload(template)}
+            className="px-3 py-2.5 bg-green-100 text-green-700 text-sm font-medium rounded-lg hover:bg-green-200 transition-colors"
+            title="Скачать HTML"
+          >
+            ⬇️
+          </button>
+          <button
             onClick={() => onEdit(template.id)}
-            className="px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+            className="px-3 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+            title="Редактировать"
           >
             ✏️
           </button>
