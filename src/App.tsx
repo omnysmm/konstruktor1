@@ -5,11 +5,13 @@ import { TemplateEditor } from './components/TemplateEditor';
 import { TemplateCard } from './components/TemplateCard';
 import { SectionRenderer } from './components/SectionRenderer';
 import { DownloadProject } from './components/DownloadProject';
+import { PaymentModal } from './components/PaymentModal';
+import { PaymentProvider, usePayment } from './context/PaymentContext';
 import { exportTemplateToHTML, downloadHTML } from './utils/exportHTML';
 
 type View = 'home' | 'preview' | 'editor';
 
-function App() {
+function AppContent() {
   const [view, setView] = useState<View>('home');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [editingState, setEditingState] = useState<EditingState>({
@@ -19,6 +21,7 @@ function App() {
   });
   const [activeTemplates, setActiveTemplates] = useState<Record<string, Template>>({});
   const [filterCategory, setFilterCategory] = useState<string>('all');
+  const { isOpen, planData, closePayment } = usePayment();
 
   const categories = ['all', ...Array.from(new Set(templates.map(t => t.category)))];
 
@@ -140,6 +143,17 @@ function App() {
         <div className="pt-14">
           <SectionRenderer template={selectedTemplate} />
         </div>
+        {/* Payment Modal */}
+        {isOpen && planData && (
+          <PaymentModal
+            isOpen={isOpen}
+            onClose={closePayment}
+            planName={planData.planName}
+            amount={planData.amount}
+            period={planData.period}
+            features={planData.features}
+          />
+        )}
       </div>
     );
   }
@@ -189,9 +203,9 @@ function App() {
             <p className="text-gray-600">Редактируйте все элементы прямо в браузере. Меняйте тексты, цвета и структуру без кода</p>
           </div>
           <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center text-2xl mb-4">🚀</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Мгновенный запуск</h3>
-            <p className="text-gray-600">Выберите шаблон, настройте и опубликуйте. Ваш сайт готов за считанные минуты</p>
+            <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center text-2xl mb-4">💰</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Платёжная система</h3>
+            <p className="text-gray-600">Встроенная оплата через Yandex Pay, банковские карты и СБП для монетизации вашего сайта</p>
           </div>
         </div>
       </section>
@@ -235,6 +249,62 @@ function App() {
         </div>
       </section>
 
+      {/* Payment Integration Section */}
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-8 md:p-12 text-white">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-sm mb-4">
+                <span>💰</span>
+                <span>Платёжная система</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Принимайте платежи на вашем сайте</h2>
+              <p className="text-white/80 mb-6">
+                Интегрированная платёжная система Yandex Pay позволяет принимать оплату банковскими картами, через СБП и Yandex Pay прямо на вашем сайте.
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">💳</span>
+                  <span>Банковские карты Visa, Mastercard, МИР</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">💰</span>
+                  <span>Yandex Pay — быстрая оплата через Яндекс</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">📱</span>
+                  <span>СБП — оплата по QR-коду</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+              <div className="text-center mb-4">
+                <div className="text-4xl mb-2">💰</div>
+                <h3 className="text-xl font-bold">Yandex Pay</h3>
+                <p className="text-white/70 text-sm">Оплата в один клик</p>
+              </div>
+              <div className="space-y-3">
+                <div className="bg-white/10 rounded-lg p-3 flex justify-between items-center">
+                  <span className="text-sm">Тариф Стартер</span>
+                  <span className="font-bold">$0</span>
+                </div>
+                <div className="bg-white/20 rounded-lg p-3 flex justify-between items-center border border-white/30">
+                  <span className="text-sm font-medium">Тариф Про</span>
+                  <span className="font-bold">$49/мес</span>
+                </div>
+                <div className="bg-white/10 rounded-lg p-3 flex justify-between items-center">
+                  <span className="text-sm">Тариф Бизнес</span>
+                  <span className="font-bold">$199/мес</span>
+                </div>
+              </div>
+              <button className="w-full mt-4 py-3 bg-yellow-400 text-gray-900 font-semibold rounded-xl hover:bg-yellow-500 transition-colors">
+                💰 Оплатить через Yandex Pay
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
@@ -251,6 +321,14 @@ function App() {
       {/* Download Project Button */}
       <DownloadProject />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <PaymentProvider>
+      <AppContent />
+    </PaymentProvider>
   );
 }
 

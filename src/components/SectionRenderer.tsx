@@ -1,4 +1,5 @@
 import { Template } from '../types';
+import { usePayment } from '../context/PaymentContext';
 
 interface Props {
   template: Template;
@@ -9,6 +10,7 @@ interface Props {
 
 export function SectionRenderer({ template, onSectionClick, selectedSection, isEditMode = false }: Props) {
   const { colors, sections } = template;
+  const { openPayment } = usePayment();
 
   const renderHero = (content: Record<string, any>, sectionId: string) => (
     <section
@@ -230,6 +232,7 @@ export function SectionRenderer({ template, onSectionClick, selectedSection, isE
                 ))}
               </ul>
               <button
+                onClick={() => openPayment(plan.name, plan.price, plan.period, plan.features || [])}
                 className="w-full py-3 rounded-xl font-semibold transition-all hover:opacity-90"
                 style={{
                   backgroundColor: plan.highlighted ? colors.primary : 'transparent',
