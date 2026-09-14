@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Template, TemplateSection, EditingState } from './types';
 import { templates } from './templates';
 import { extendedTemplates } from './extendedTemplates';
@@ -9,6 +9,7 @@ import { DownloadProject } from './components/DownloadProject';
 import { PaymentModal } from './components/PaymentModal';
 import { AdminDashboard } from './components/AdminDashboard';
 import { TemplateGenerator } from './components/TemplateGenerator';
+import { SearchAndFilters } from './components/SearchAndFilters';
 import { PaymentProvider, usePayment } from './context/PaymentContext';
 import { I18nProvider, useI18n } from './context/I18nContext';
 import { exportTemplateToHTML, downloadHTML } from './utils/exportHTML';
@@ -25,6 +26,8 @@ function AppContent() {
   });
   const [activeTemplates, setActiveTemplates] = useState<Record<string, Template>>({});
   const [filterCategory, setFilterCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc' | 'sections-asc' | 'sections-desc' | 'category'>('name-asc');
   const [customTemplates, setCustomTemplates] = useState<Template[]>([]);
   const { isOpen, planData, closePayment } = usePayment();
   const { t } = useI18n();
@@ -34,9 +37,45 @@ function AppContent() {
 
   const categories = ['all', ...Array.from(new Set(allTemplates.map(t => t.category)))];
 
-  const filteredTemplates = filterCategory === 'all'
-    ? allTemplates
-    : allTemplates.filter(t => t.category === filterCategory);
+  // Фильтрация и сортировка шаблонов
+  const filteredTemplates = useMemo(() => {
+    let result = allTemplates;
+
+    // Фильтр по категории
+    if (filterCategory !== 'all') {
+      result = result.filter(t => t.category === filterCategory);
+    }
+
+    // Фильтр по поисковому запросу
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(t =>
+        t.name.toLowerCase().includes(query) ||
+        t.description.toLowerCase().includes(query) ||
+        t.category.toLowerCase().includes(query)
+      );
+    }
+
+    // Сортировка
+    result = [...result].sort((a, b) => {
+      switch (sortBy) {
+        case 'name-asc':
+          return a.name.localeCompare(b.name, 'ru');
+        case 'name-desc':
+          return b.name.localeCompare(a.name, 'ru');
+        case 'sections-asc':
+          return a.sections.length - b.sections.length;
+        case 'sections-desc':
+          return b.sections.length - a.sections.length;
+        case 'category':
+          return a.category.localeCompare(b.category, 'ru');
+        default:
+          return 0;
+      }
+    });
+
+    return result;
+  }, [allTemplates, filterCategory, searchQuery, sortBy]);
 
   const handleSelectTemplate = useCallback((template: Template) => {
     const cloned = JSON.parse(JSON.stringify(template));
@@ -238,36 +277,51 @@ function AppContent() {
           <p className="text-lg text-gray-600">Профессиональные шаблоны для любого типа бизнеса</p>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-2 justify-center mb-10">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setFilterCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                filterCategory === cat
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-              }`}
-            >
-              {cat === 'all' ? 'Все шаблоны' : cat}
-            </button>
-          ))}
-        </div>
+        {/* Search and Filters */}
+        <SearchAndFilters
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          filterCategory={filterCategory}
+          onCategoryChange={setFilterCategory}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+          categories={categories}
+          totalCount={allTemplates.length}
+          filteredCount={filteredTemplates.length}
+        />
 
         {/* Template Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTemplates.map(template => (
-            <TemplateCard
-              key={template.id}
-              template={template}
-              onSelect={handleSelectTemplate}
-              onEdit={handleEditTemplate}
-              onDownload={handleDownloadTemplate}
-              isActive={!!activeTemplates[template.id]}
-            />
-          ))}
-        </div>
+        {filteredTemplates.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredTemplates.map(template => (
+              <TemplateCard
+                key={template.id}
+                template={template}
+                onSelect={handleSelectTemplate}
+                onEdit={handleEditTemplate}
+                onDownload={handleDownloadTemplate}
+                isActive={!!activeTemplates[template.id]}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Ничего не найдено</h3>
+            <p className="text-gray-600 mb-6">
+              Попробуйте изменить поисковый запрос или сбросить фильтры
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setFilterCategory('all');
+              }}
+              className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition-colors"
+            >
+              Сбросить фильтры
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Payment Integration Section */}
