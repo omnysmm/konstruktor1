@@ -7,16 +7,24 @@ interface PaymentModalProps {
   amount: string;
   period: string;
   features: string[];
+  templateName?: string;
+  templatePrice?: string;
 }
 
-type PaymentMethod = 'yandex-pay' | 'card' | 'sbp';
+type PaymentMethod = 'yandex-pay' | 'card' | 'sbp' | 'apple-pay' | 'google-pay' | 'crypto';
 type PaymentStatus = 'idle' | 'processing' | 'success' | 'error';
+type PurchaseType = 'subscription' | 'template';
 
-export function PaymentModal({ isOpen, onClose, planName, amount, period, features }: PaymentModalProps) {
+export function PaymentModal({ isOpen, onClose, planName, amount, period, features, templateName, templatePrice }: PaymentModalProps) {
+  const [purchaseType, setPurchaseType] = useState<PurchaseType>('subscription');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('yandex-pay');
   const [status, setStatus] = useState<PaymentStatus>('idle');
   const [cardData, setCardData] = useState({ number: '', expiry: '', cvv: '', name: '' });
   const [phone, setPhone] = useState('');
+
+  const currentAmount = purchaseType === 'subscription' ? amount : (templatePrice || '990');
+  const currentPeriod = purchaseType === 'subscription' ? period : '';
+  const currentName = purchaseType === 'subscription' ? planName : (templateName || 'Шаблон');
 
   const handlePayment = () => {
     setStatus('processing');
@@ -60,8 +68,12 @@ export function PaymentModal({ isOpen, onClose, planName, amount, period, featur
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Оплата подписки</h2>
-              <p className="text-sm text-gray-500 mt-1">Тариф: {planName}</p>
+              <h2 className="text-xl font-bold text-gray-900">
+                {purchaseType === 'subscription' ? 'Оплата подписки' : 'Покупка шаблона'}
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                {purchaseType === 'subscription' ? `Тариф: ${planName}` : `Шаблон: ${templateName}`}
+              </p>
             </div>
             <button
               onClick={onClose}
@@ -70,6 +82,32 @@ export function PaymentModal({ isOpen, onClose, planName, amount, period, featur
               ✕
             </button>
           </div>
+          
+          {/* Purchase Type Toggle */}
+          {templateName && (
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={() => setPurchaseType('subscription')}
+                className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  purchaseType === 'subscription'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                💎 Подписка
+              </button>
+              <button
+                onClick={() => setPurchaseType('template')}
+                className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  purchaseType === 'template'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                🛒 Купить шаблон
+              </button>
+            </div>
+          )}
         </div>
 
         {status === 'idle' && (
@@ -77,20 +115,43 @@ export function PaymentModal({ isOpen, onClose, planName, amount, period, featur
             {/* Order Summary */}
             <div className="p-6 bg-gradient-to-r from-indigo-50 to-purple-50">
               <div className="flex justify-between items-center mb-3">
-                <span className="font-semibold text-gray-900">{planName}</span>
+                <span className="font-semibold text-gray-900">{currentName}</span>
                 <span className="text-2xl font-bold text-indigo-600">
-                  {amount}<span className="text-sm font-normal text-gray-500">{period}</span>
+                  {currentAmount}<span className="text-sm font-normal text-gray-500">{currentPeriod}</span>
                 </span>
               </div>
               <div className="space-y-1">
-                {features.slice(0, 3).map((f, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                    <span className="text-green-500">✓</span>
-                    {f}
-                  </div>
-                ))}
-                {features.length > 3 && (
-                  <div className="text-sm text-gray-400">+{features.length - 3} других преимуществ</div>
+                {purchaseType === 'subscription' ? (
+                  <>
+                    {features.slice(0, 3).map((f, i) => (
+                      <div key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                        <span className="text-green-500">✓</span>
+                        {f}
+                      </div>
+                    ))}
+                    {features.length > 3 && (
+                      <div className="text-sm text-gray-400">+{features.length - 3} других преимуществ</div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span className="text-green-500">✓</span>
+                      Полный доступ к шаблону
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span className="text-green-500">✓</span>
+                      Все секции и компоненты
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span className="text-green-500">✓</span>
+                      Бесплатные обновления
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span className="text-green-500">✓</span>
+                      Коммерческое использование
+                    </div>
+                  </>
                 )}
               </div>
             </div>

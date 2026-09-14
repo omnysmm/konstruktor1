@@ -17,9 +17,11 @@ interface RecentPayment {
   date: string;
 }
 
+import { PricingManagement } from './PricingManagement';
+
 export function AdminDashboard() {
   const { t, formatPrice, language, setLanguage, currency, setCurrency } = useI18n();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'payments' | 'templates' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'payments' | 'templates' | 'settings' | 'pricing'>('dashboard');
 
   // Мок данные
   const stats: DashboardStats = {
@@ -79,6 +81,7 @@ export function AdminDashboard() {
               { id: 'users', label: t('users'), icon: '👥' },
               { id: 'payments', label: t('payments'), icon: '💳' },
               { id: 'templates', label: t('templates'), icon: '🎨' },
+              { id: 'pricing', label: 'Цены', icon: '💰' },
               { id: 'settings', label: t('settings'), icon: '⚙️' },
             ].map((tab) => (
               <button
@@ -224,6 +227,7 @@ export function AdminDashboard() {
           </div>
         )}
 
+        {activeTab === 'pricing' && <PricingManagement />}
         {activeTab === 'settings' && <SettingsPanel />}
       </div>
     </div>

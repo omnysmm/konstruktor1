@@ -2,6 +2,9 @@ import { useState, useCallback, useMemo } from 'react';
 import { Template, TemplateSection, EditingState } from './types';
 import { templates } from './templates';
 import { extendedTemplates } from './extendedTemplates';
+import { kitchenTemplates } from './kitchenTemplates';
+import { bloggersTemplates } from './bloggersTemplates';
+import { aiTemplates } from './aiTemplates';
 import { TemplateEditor } from './components/TemplateEditor';
 import { TemplateCard } from './components/TemplateCard';
 import { SectionRenderer } from './components/SectionRenderer';
@@ -33,7 +36,7 @@ function AppContent() {
   const { t } = useI18n();
 
   // Объединяем все шаблоны
-  const allTemplates = [...extendedTemplates, ...customTemplates];
+  const allTemplates = [...extendedTemplates, ...kitchenTemplates, ...bloggersTemplates, ...aiTemplates, ...customTemplates];
 
   const categories = ['all', ...Array.from(new Set(allTemplates.map(t => t.category)))];
 
