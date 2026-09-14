@@ -1,18 +1,22 @@
 import { useState, useCallback } from 'react';
 import { Template, TemplateSection, EditingState } from './types';
 import { templates } from './templates';
+import { extendedTemplates } from './extendedTemplates';
 import { TemplateEditor } from './components/TemplateEditor';
 import { TemplateCard } from './components/TemplateCard';
 import { SectionRenderer } from './components/SectionRenderer';
 import { DownloadProject } from './components/DownloadProject';
 import { PaymentModal } from './components/PaymentModal';
+import { AdminDashboard } from './components/AdminDashboard';
+import { TemplateGenerator } from './components/TemplateGenerator';
 import { PaymentProvider, usePayment } from './context/PaymentContext';
+import { I18nProvider, useI18n } from './context/I18nContext';
 import { exportTemplateToHTML, downloadHTML } from './utils/exportHTML';
 
 type View = 'home' | 'preview' | 'editor';
 
 function AppContent() {
-  const [view, setView] = useState<View>('home');
+  const [view, setView] = useState<'home' | 'preview' | 'editor' | 'admin'>('home');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [editingState, setEditingState] = useState<EditingState>({
     selectedSection: null,
@@ -21,13 +25,18 @@ function AppContent() {
   });
   const [activeTemplates, setActiveTemplates] = useState<Record<string, Template>>({});
   const [filterCategory, setFilterCategory] = useState<string>('all');
+  const [customTemplates, setCustomTemplates] = useState<Template[]>([]);
   const { isOpen, planData, closePayment } = usePayment();
+  const { t } = useI18n();
 
-  const categories = ['all', ...Array.from(new Set(templates.map(t => t.category)))];
+  // Объединяем все шаблоны
+  const allTemplates = [...extendedTemplates, ...customTemplates];
+
+  const categories = ['all', ...Array.from(new Set(allTemplates.map(t => t.category)))];
 
   const filteredTemplates = filterCategory === 'all'
-    ? templates
-    : templates.filter(t => t.category === filterCategory);
+    ? allTemplates
+    : allTemplates.filter(t => t.category === filterCategory);
 
   const handleSelectTemplate = useCallback((template: Template) => {
     const cloned = JSON.parse(JSON.stringify(template));
@@ -89,6 +98,18 @@ function AppContent() {
     const filename = `${template.name.replace(/\s+/g, '-').toLowerCase()}.html`;
     downloadHTML(html, filename);
   }, []);
+
+  const handleTemplateGenerated = useCallback((template: Template) => {
+    setCustomTemplates(prev => [...prev, template]);
+    setActiveTemplates(prev => ({ ...prev, [template.id]: template }));
+    setSelectedTemplate(template);
+    setView('preview');
+  }, []);
+
+  // Админ-панель
+  if (view === 'admin') {
+    return <AdminDashboard />;
+  }
 
   if (view === 'editor' && selectedTemplate) {
     return (
@@ -305,6 +326,51 @@ function AppContent() {
         </div>
       </section>
 
+      {/* AI Template Generator */}
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="grid md:grid-cols-2 gap-8">
+          <TemplateGenerator onTemplateGenerated={handleTemplateGenerated} />
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-3xl">🗺️</span>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Яндекс Карты</h3>
+                <p className="text-sm text-gray-500">Интеграция с картами для вашего бизнеса</p>
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 mb-4">
+              <div className="flex items-center justify-center h-48 bg-white rounded-lg border border-gray-200 relative overflow-hidden">
+                <div className="absolute inset-0 opacity-20">
+                  <div className="absolute top-4 left-4 w-16 h-16 border-2 border-blue-400 rounded"></div>
+                  <div className="absolute top-20 right-8 w-24 h-1 bg-blue-400 rounded"></div>
+                  <div className="absolute bottom-8 left-12 w-32 h-1 bg-blue-400 rounded"></div>
+                  <div className="absolute bottom-16 right-16 w-20 h-20 border-2 border-green-400 rounded-full"></div>
+                </div>
+                <div className="text-center z-10">
+                  <div className="text-4xl mb-2">📍</div>
+                  <p className="text-sm font-medium text-gray-700">Яндекс Карты</p>
+                  <p className="text-xs text-gray-500">Интерактивная карта</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
+                <input type="checkbox" defaultChecked className="w-4 h-4 text-indigo-600 rounded" />
+                <span className="text-sm text-gray-700">Показывать карту на сайте</span>
+              </label>
+              <label className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
+                <input type="checkbox" defaultChecked className="w-4 h-4 text-indigo-600 rounded" />
+                <span className="text-sm text-gray-700">Маркеры филиалов</span>
+              </label>
+              <label className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
+                <input type="checkbox" className="w-4 h-4 text-indigo-600 rounded" />
+                <span className="text-sm text-gray-700">Построение маршрутов</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
@@ -320,15 +386,26 @@ function AppContent() {
 
       {/* Download Project Button */}
       <DownloadProject />
+
+      {/* Admin Panel Button */}
+      <button
+        onClick={() => setView('admin')}
+        className="fixed bottom-6 left-6 px-6 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 z-40 flex items-center gap-2"
+      >
+        <span>⚙️</span>
+        <span>{t('dashboard')}</span>
+      </button>
     </div>
   );
 }
 
 function App() {
   return (
-    <PaymentProvider>
-      <AppContent />
-    </PaymentProvider>
+    <I18nProvider>
+      <PaymentProvider>
+        <AppContent />
+      </PaymentProvider>
+    </I18nProvider>
   );
 }
 
